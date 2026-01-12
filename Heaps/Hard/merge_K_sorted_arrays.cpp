@@ -1,63 +1,67 @@
-#include<iostream>
-#include<queue>
+#include <iostream>
+#include <queue>
+#include <vector>   // <-- missing include
 using namespace std;
 
-class info{
-    public:
+class info {
+public:
     int data;
-    int row; 
+    int row;
     int col;
-    info(int data, int row, int col){
+    info(int data, int row, int col) {
         this->data = data;
         this->row = row;
-        this-> col = col;
+        this->col = col;
     }
 };
 
-class compare{
-    public:
-    bool operator()(info* a, info* b){
-        return a-> data > b-> data;
+class compare {
+public:
+    bool operator()(info* a, info* b) {
+        return a->data > b->data;
     }
 };
 
+vector<int> mergeSortedArray(vector<vector<int>>& nums) {
+    int k = nums.size();          // number of arrays
+    int n = nums[0].size();       // number of columns
 
-vector<int>merge(int arr[][4], int k, int n){
-    // crrate minHeap;
-    priority_queue<info*,vector<info*>,compare>minHeap;
+    priority_queue<info*, vector<info*>, compare> minheap;
 
-    // insert first element of k arrays
-    for ( int i = 0; i < k ; i++){
-        info* temp = new info(arr[i][0], i , 0);
-        minHeap.push(temp);
+    for (int i = 0; i < k; i++) {
+        info* temp = new info(nums[i][0], i, 0);
+        minheap.push(temp);
     }
 
-    vector<int>ans;
-  while (!minHeap.empty()){
-    info* temp = minHeap.top();
-    int topElement = temp->data;
-    int topRow = temp->row;
-    int topCol = temp->col;
-    minHeap.pop();
+    vector<int> ans;
 
-    ans.push_back(topElement);
+    while (!minheap.empty()) {
+        info* temp1 = minheap.top();
+        int topElement = temp1->data;
+        int topRow = temp1->row;
+        int topCol = temp1->col;
+        minheap.pop();
+        ans.push_back(topElement);
 
-    if(topCol +  1  < n){
-        info* newInfo = new info(arr[topRow][topCol+1], topRow, topCol+1);
-        minHeap.push(newInfo);
+        if (topCol + 1 < n) {
+            info* newInfo = new info(nums[topRow][topCol + 1], topRow, topCol + 1);
+            minheap.push(newInfo);
+        }
     }
-  }
-  return ans;
+    return ans;
 }
 
+int main() {
+    // Converted static array to vector<vector<int>> (so function call works)
+    vector<vector<int>> nums = {
+        {2, 4, 6, 8},
+        {1, 3, 5, 7},
+        {0, 9, 10, 11}
+    };
 
-int main(){
-    int arr[][4] = {{2,4,6,8},{1,3,5,7},{0,9,10,11}};
-    int k = 3;
-    int n = 4;
-    vector<int>ans = merge(arr,k,n);
-    for(auto i : ans){
-        cout<<i<<" ";
+    vector<int> ans = mergeSortedArray(nums);
+    for (auto i : ans) {
+        cout << i << " ";
     }
     return 0;
 }

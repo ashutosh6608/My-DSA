@@ -2,7 +2,7 @@
 #include<queue>
 using namespace std;
 
-findKthLargest(int arr[], int n , int k){
+int findKthLargest(int arr[], int n , int k){
 
     // min heap
     priority_queue<int, vector<int>,greater<int>>minHeap;
